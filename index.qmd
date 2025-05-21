@@ -1,0 +1,89 @@
+---
+title: "Densidad Poblacional en Costa Rica"
+Autor: "Yohel Morales"
+format: html
+editor: visual
+execute: 
+  echo: false
+  warning: false
+  mmesage: false
+---
+
+# Introducción
+
+Este sitio web presenta un análisis descriptivo de la densidad poblacional por provincia en Costa Rica, utilizando datos geográficos y demográficos actualizados. El objetivo es mostrar cómo se distribuye la población en el territorio nacional mediante mapas interactivos, gráficos y explicaciones claras.
+
+La densidad poblacional es un indicador clave para comprender la concentración de personas en un área determinada, con implicaciones importantes para la planificación urbana, el desarrollo sostenible y la toma de decisiones. Aunque Costa Rica es un país pequeño, existen notables diferencias entre provincias, especialmente entre el Valle Central y las regiones periféricas.
+
+El análisis se basa en variables como población, superficie y coordenadas geográficas, a partir de las cuales se calcula la densidad poblacional. Además, el sitio plantea preguntas clave para orientar futuros estudios sobre las dinámicas territoriales del país. Esta herramienta busca apoyar el aprendizaje y la toma de decisiones en temas relacionados con la geografía y el desarrollo regional.
+
+## Objetivos
+
+-   Describir las características principales del conjunto de datos.
+-   Explorar patrones espaciales de densidad poblacional.
+-   Formular preguntas clave para futuros análisis más complejos.
+
+# Conjunto de Datos
+
+El conjunto de datos incluye las siguientes variables:
+
+-   `Provincia`: nombre de la provincia costarricense.
+-   `Poblacion`: número estimado de habitantes.
+-   `Area_km2`: superficie en kilómetros cuadrados.
+-   `Latitud` y `Longitud`: coordenadas geográficas.
+-   `Densidad_poblacional`: cálculo de población por kilómetro cuadrado.
+
+# Preguntas para resolver
+
+1.¿Qué provincia presenta la mayor densidad poblacional y cuáles factores podrían explicarlo?
+
+2.¿Existe una relación clara entre el tamaño del área (km²) y la cantidad de población?
+
+3.¿Qué provincias presentan una baja densidad poblacional y cómo se relaciona esto con su localización geográfica o características físicas (como el relieve)?
+
+4.¿Se observa una concentración de la población en el Valle Central en comparación con el resto del país?
+
+[Fuente de referencia](https://www.inec.cr) para datos de población y superficie.
+
+![Ejemplo Mapa de Densidad](Costa-Rica-mapa-poblacion)
+
+# Análisis de Datos
+
+```{r}
+library(tidyverse)
+library(plotly)
+data <- read_csv("data/densidad_provincias.csv")
+```
+
+## Gráfico 1: Densidad poblacional por provincia
+
+```{r}
+p1 <- ggplot(data, aes(x = reorder(Provincia, Densidad_poblacional), y = Densidad_poblacional)) +
+  geom_col(fill = "steelblue") +
+  coord_flip() +
+  labs(title = "Densidad Poblacional por Provincia",
+       x = "Provincia", y = "Habitantes por km²")
+ggplotly(p1)
+```
+
+Comentario: San José presenta la mayor densidad poblacional, mientras que Guanacaste tiene la más baja.
+
+## Gráfico 2: Población vs Área
+
+```{r}
+p2 <- ggplot(data, aes(x = Area_km2, y = Poblacion, label = Provincia)) +
+  geom_point(aes(size = Densidad_poblacional), color = "darkgreen") +
+  labs(title = "Relación entre Área y Población por Provincia",
+       x = "Área (km²)", y = "Población")
+ggplotly(p2)
+```
+
+Comentario: Aunque algunas provincias son extensas, no siempre son las más pobladas.
+
+# Conclusión
+
+Este análisis inicial permite identificar disparidades en la densidad poblacional y plantea interrogantes sobre la distribución de servicios, infraestructura y desarrollo en las provincias costarricenses.
+
+> “El análisis espacial es clave para una planificación territorial más equitativa.”
+
+**Siguientes pasos:** profundizar con mapas temáticos e incorporar datos socioeconómicos.
